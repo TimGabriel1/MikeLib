@@ -42,13 +42,13 @@ public class ListOfMembers extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "S/N", "Name", "Phone Number", "Email"
+                "S/N", "Name", "Phone Number", "Email", "Action"
             }
         ));
         jScrollPane1.setViewportView(jTable1);

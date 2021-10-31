@@ -4,17 +4,40 @@
  */
 package View;
 
+import DAO.BookDAO;
+import DAO.BookDAOImpl;
+import Model.Book;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author mac
  */
 public class ListOfBooks extends javax.swing.JFrame {
-
+    List<Book> bookList;
+    BookDAO bookDAO;
     /**
      * Creates new form ListOfBooks
      */
     public ListOfBooks() {
         initComponents();
+        bookDAO = new BookDAOImpl();
+        bookList = bookDAO.getBooks();
+        System.out.println(bookList.get(0).toString());
+         DefaultTableModel model = new DefaultTableModel();
+    table.setModel(model);
+        for (Model.Book b : bookList) {
+            Object[] o = new Object[6];
+            o[0] = b.getId();
+            o[1] = b.getName();
+            o[2] = b.getAuthor();
+            o[3] = b.getYear();
+            o[4] = b.getISBN();
+            o[5] = b.getDateAdded();
+           
+        }
     }
 
     /**
@@ -29,7 +52,7 @@ public class ListOfBooks extends javax.swing.JFrame {
         contentPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 
@@ -40,7 +63,7 @@ public class ListOfBooks extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("MikeLib Library Management System");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -51,7 +74,7 @@ public class ListOfBooks extends javax.swing.JFrame {
                 "S/N", "Book Title", "Author", "Year of Publication", "ISBN", "Date Added", "Actions"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(table);
 
         jButton3.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jButton3.setText("Add New Books");
@@ -117,7 +140,9 @@ public class ListOfBooks extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+            new AddBook().setVisible(true);
+            this.setVisible(false);
+// TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -165,6 +190,6 @@ public class ListOfBooks extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }
