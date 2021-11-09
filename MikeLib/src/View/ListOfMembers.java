@@ -4,17 +4,106 @@
  */
 package View;
 
+import Controller.MemberController;
+import Model.Member;
+import Util.ButtonColumn;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.AbstractAction;
+import javax.swing.JOptionPane;
+import javax.swing.table.AbstractTableModel;
+
 /**
  *
  * @author mac
  */
 public class ListOfMembers extends javax.swing.JFrame {
-
+    private MemberController memberController = new MemberController();
+    private List<Member> members = memberController.getAllMembers();
     /**
      * Creates new form ListOfBooks
      */
     public ListOfMembers() {
         initComponents();
+        String[] header = {"ID","Name","Phone Number","Email"};
+        membersTable.setRowHeight(30);
+        
+        membersTable.setModel(new AbstractTableModel(){
+            @Override
+            public int getRowCount() {
+                return members.size();
+            }
+
+            @Override
+            public int getColumnCount() {
+                return header.length + 2;//2 for edit and delete button
+            }
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                Member memberIns = members.get(rowIndex);
+                switch(columnIndex){
+                    case 0:
+                        return memberIns.getIdNumber();
+                    case 1:
+                        return memberIns.getName();
+                    case 2:
+                        return memberIns.getEmail();
+                    case 3:
+                        return memberIns.getPhoneNumber();
+                    case 4:
+                        return "Edit";
+                    case 5:
+                        return "Delete";
+                }
+                return null;
+            }
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return true;
+            }
+            
+        });
+        
+        new ButtonColumn(membersTable, new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Edit member details
+                new EditMember(members.get(Integer.parseInt(e.getActionCommand()))).setVisible(true);
+                ListOfMembers.this.dispose();
+            }
+        },4, (ArrayList<Member>) members);
+        
+        new ButtonColumn(membersTable,new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Delete members details
+                Member m = members.get(Integer.parseInt(e.getActionCommand()));
+                int option = JOptionPane.showConfirmDialog(rootPane, 
+                        "You are about to delete "+m.getName(), 
+                        null, 
+                        JOptionPane.YES_NO_OPTION, 
+                        JOptionPane.WARNING_MESSAGE,
+                        null);
+                if(option == JOptionPane.YES_OPTION){
+                    if(memberController.deleteMember(m.getId())){
+                        JOptionPane.showMessageDialog(rootPane, "Deleted Successfully");
+                        new ListOfMembers().setVisible(true);
+                        ListOfMembers.this.dispose();
+                    }else{
+                        JOptionPane.showConfirmDialog(rootPane, "Delete failed");
+                    }
+                }
+            }
+        },5, (ArrayList<Member>) members);
+        
+        for(int i=0; i<header.length; i++){
+            membersTable.getColumnModel().getColumn(i).setHeaderValue(header[i]);//Set Header
+        }
+        membersTable.getColumnModel().getColumn(4).setHeaderValue("Action");
+        membersTable.getColumnModel().getColumn(5).setHeaderValue("");
     }
 
     /**
@@ -29,9 +118,9 @@ public class ListOfMembers extends javax.swing.JFrame {
         contentPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        membersTable = new javax.swing.JTable();
+        addMemberBtn = new javax.swing.JButton();
+        backBtn = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -49,7 +138,7 @@ public class ListOfMembers extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("MikeLib Library Management System");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        membersTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -60,21 +149,21 @@ public class ListOfMembers extends javax.swing.JFrame {
                 "S/N", "Name", "Phone Number", "Email", "Action"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(membersTable);
 
-        jButton3.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
-        jButton3.setText("Add New Members");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        addMemberBtn.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        addMemberBtn.setText("Add New Members");
+        addMemberBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                addMemberBtnActionPerformed(evt);
             }
         });
 
-        jButton4.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
-        jButton4.setText("Back");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        backBtn.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        backBtn.setText("Back");
+        backBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                backBtnActionPerformed(evt);
             }
         });
 
@@ -92,9 +181,9 @@ public class ListOfMembers extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 811, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(contentPanelLayout.createSequentialGroup()
                         .addGap(126, 126, 126)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(123, 123, 123)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(addMemberBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(45, Short.MAX_VALUE))
         );
         contentPanelLayout.setVerticalGroup(
@@ -106,8 +195,8 @@ public class ListOfMembers extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(addMemberBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -183,13 +272,19 @@ public class ListOfMembers extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void addMemberBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMemberBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+        new AddMember().setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_addMemberBtnActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+        new Dashboard().setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_backBtnActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         this.setVisible(false);
@@ -258,9 +353,9 @@ public class ListOfMembers extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addMemberBtn;
+    private javax.swing.JButton backBtn;
     private javax.swing.JPanel contentPanel;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
@@ -272,6 +367,6 @@ public class ListOfMembers extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable membersTable;
     // End of variables declaration//GEN-END:variables
 }

@@ -29,23 +29,6 @@ CREATE TABLE `book` (
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
 
-CREATE TABLE `borrowed_book` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `memberID` int NOT NULL,
-  `bookID` int NOT NULL,
-  `dateCollected` datetime DEFAULT NULL,
-  `dateReturned` datetime DEFAULT NULL,
-  `returned` tinyint(1) DEFAULT NULL,
-  `issuedBy` int DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `book_id_idx` (`bookID`),
-  KEY `member_id_idx` (`memberID`),
-  KEY `issuedBy_idx` (`issuedBy`),
-  CONSTRAINT `book_id` FOREIGN KEY (`bookID`) REFERENCES `book` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `issuedBy` FOREIGN KEY (`issuedBy`) REFERENCES `user` (`id`),
-  CONSTRAINT `member_id` FOREIGN KEY (`memberID`) REFERENCES `member` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
 CREATE TABLE `member` (
   `id` int NOT NULL AUTO_INCREMENT,
   `idNumber` varchar(50) DEFAULT NULL,
@@ -63,6 +46,24 @@ CREATE TABLE `user` (
   `password` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+
+
+CREATE TABLE `borrowed_book` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `memberID` int NOT NULL,
+  `bookID` int NOT NULL,
+  `dateCollected` datetime DEFAULT NULL,
+  `dateReturned` datetime DEFAULT NULL,
+  `returned` tinyint(1) DEFAULT NULL,
+  `issuedBy` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `book_id_idx` (`bookID`),
+  KEY `member_id_idx` (`memberID`),
+  KEY `issuedBy_idx` (`issuedBy`),
+  CONSTRAINT `book_id` FOREIGN KEY (`bookID`) REFERENCES `book` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `issuedBy` FOREIGN KEY (`issuedBy`) REFERENCES `user` (`id`),
+  CONSTRAINT `member_id` FOREIGN KEY (`memberID`) REFERENCES `member` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 INSERT INTO `book` (`id`, `bookTitle`, `authorName`, `year`, `isbn`, `dateAdded`) VALUES
 ('1', 'Java How to Program', 'Mike Mike', '2020', '3212-2312-231-2312', '2021-10-31 08:39:09'),
