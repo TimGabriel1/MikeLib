@@ -30,7 +30,7 @@ public class MemberDAOImpl implements MemberDAO{
 
     @Override
     public boolean saveMember(Member member) {
-         boolean flag = false;
+        boolean flag = false;
         try {
 
       
@@ -78,7 +78,7 @@ public class MemberDAOImpl implements MemberDAO{
                 member.setName(resultSet.getString("name"));
                 member.setPhoneNumber(resultSet.getString("phoneNumber"));
                 member.setEmail(resultSet.getString("email"));
-
+                member.setIdNumber(resultSet.getString("idNumber"));
  
 
                 list.add(member);
@@ -90,6 +90,42 @@ public class MemberDAOImpl implements MemberDAO{
         }
 
         return list;
+    }
+
+    @Override
+    public boolean deleteMember(int id) {
+        boolean flag = false;
+        try {
+
+      
+            String sql = "DELETE FROM member WHERE id="+id;
+            connection = DBConnectionUtil.openConnection();
+            preparedStmt = connection.prepareStatement(sql);
+            preparedStmt.executeUpdate();
+            flag = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return flag;
+    }
+
+    @Override
+    public boolean editMember(Member member) {
+        boolean flag = false;
+        try {
+            String sql = "UPDATE member SET idNumber = '"+member.getIdNumber()
+                    +"', name = '"+member.getName()+"', phoneNumber = '"+member.getPhoneNumber()
+                    +"', email = '"+member.getEmail()+"' WHERE id='"+member.getId()+"'";
+            connection = DBConnectionUtil.openConnection();
+            preparedStmt = connection.prepareStatement(sql);
+            preparedStmt.executeUpdate();
+            flag = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return flag;
     }
     
     
