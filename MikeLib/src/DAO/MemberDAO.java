@@ -16,5 +16,6 @@ public interface MemberDAO {
     Member getMember(String key);
     Member getMember(int id);
     List<Member> getMembers();
-    
+    boolean deleteMember(int id);
+    boolean editMember(Member member);
 }

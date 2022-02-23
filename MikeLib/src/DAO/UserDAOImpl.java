@@ -174,9 +174,4 @@ public class UserDAOImpl implements UserDAO {
             Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return isMatch;
-
-
-
-
-  
 }}

@@ -87,7 +87,7 @@ public class Login extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        contentPanel.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 270, 270, 60));
+        contentPanel.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 260, 270, 60));
 
         jMenu1.setText("Books");
 
