@@ -7,6 +7,7 @@ package Controller;
 import DAO.BookDAO;
 import DAO.BookDAOImpl;
 import Model.Book;
+import java.util.List;
 
 /**
  *
@@ -19,5 +20,28 @@ public class BookController {
             return true;
         }else
             return false;
+    }
+     public List<Book> getBooks(){
+        if(bookDAO.getBooks() != null){
+            return bookDAO.getBooks();
+        }
+        return null;
+    }
+    
+    
+    public void uploadBookCsv(String csv){
+        
+    }
+    
+    public Book getBook(int id){
+        return bookDAO.get(id);
+    }
+    
+    public boolean deleteBook(int id){
+        return bookDAO.delete(id);
+    }
+    
+    public boolean updateBook(Book newUpdate){
+        return bookDAO.update(newUpdate);
     }
 }

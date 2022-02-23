@@ -28,6 +28,7 @@ public class BookDAOImpl implements BookDAO{
     private Statement statement;
     private ResultSet resultSet;
 
+
     @Override
     public boolean saveBook(Book book) {
          boolean flag = false;
@@ -51,16 +52,7 @@ public class BookDAOImpl implements BookDAO{
         return flag;
     }
 
-    @Override
-    public Book getBook(String key) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Book getBook(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+ 
     @Override
     public List<Book> getBooks() {
         try {
@@ -94,6 +86,40 @@ public class BookDAOImpl implements BookDAO{
         return list;
     }
     
-    
+    @Override
+    public Book get(int id) {
+            Book book = null;
+        try {
+            book = new Book();
+            String sql = "SELECT * FROM book WHERE id=" + id;
+            connection = DBConnectionUtil.openConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+
+                  book = new Book();
+                book.setId(resultSet.getInt("id"));
+                book.setName(resultSet.getString("bookTitle"));
+                book.setYear(resultSet.getString("year"));
+                book.setAuthor(resultSet.getString("authorName"));
+                book.setISBN(resultSet.getString("isbn"));
+                book.setDateAdded(resultSet.getDate("dateAdded"));
+
+           
+
+ 
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //////System.out.println(user.toString());
+        return book;
+    }
+   
     
 }

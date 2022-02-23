@@ -13,8 +13,11 @@ import java.util.List;
  */
 public interface BookDAO {
     boolean saveBook(Book book);
-    Book getBook(String key);
-    Book getBook(int id);
+    Book get(int id);
     List<Book> getBooks();
+
+    public boolean delete(int id);
+
+    public boolean update(Book newUpdate);
     
 }
